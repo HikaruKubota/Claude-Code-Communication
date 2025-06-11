@@ -16,12 +16,13 @@ mkdir -p ./tmp
 
 # President セッション（バックグラウンド）
 echo "👑 Presidentセッション作成中..."
-tmux new-session -d -s president \; \
+tmux new-session -d -s president -c "$PWD" \; \
   send-keys 'export PS1="[PRESIDENT] $ "' C-m \; \
   send-keys 'clear' C-m \; \
   send-keys 'echo "=== PRESIDENT セッション ==="' C-m \; \
   send-keys 'echo "役割: プロジェクト統括責任者"' C-m \; \
   send-keys 'echo "Claude Code起動中..."' C-m \; \
+  send-keys 'cd "'"$PWD"'"' C-m \; \
   send-keys 'claude' C-m
 
 echo "📺 3秒後に4分割画面を表示します..."

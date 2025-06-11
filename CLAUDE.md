@@ -19,6 +19,11 @@
 - **worker2**: @instructions/worker2_frontend.md
 - **worker3**: @instructions/worker3_qa.md
 
+## 現在のセッション確認
+```bash
+./check-session.sh  # 自分が誰かを確認
+```
+
 ## メッセージ送信
 ```bash
 ./agent-send.sh [相手] "[メッセージ]"

@@ -36,13 +36,12 @@ cd Claude-Code-Communication
 ./setup.sh
 ```
 
-### 2. セッションアタッチ
+### 2. 画面確認
 
+setup.shを実行すると、現在のターミナルが自動的に4分割画面（multiagentセッション）に切り替わります。
+
+別ターミナルでPRESIDENTセッションを確認する場合：
 ```bash
-# マルチエージェント確認
-tmux attach-session -t multiagent
-
-# プレジデント確認（別ターミナルで）
 tmux attach-session -t president
 ```
 
@@ -53,9 +52,14 @@ setup.shを実行すると、各ペインで自動的にClaude Codeが起動し�
 
 ### 4. デモ実行
 
-PRESIDENTセッションで直接入力：
+別ターミナルでPRESIDENTセッションにアタッチし、以下を入力：
 ```
 あなたはpresidentです。指示書に従って
+```
+
+または、現在のセッションから送信：
+```bash
+./agent-send.sh president "あなたはpresidentです。指示書に従って"
 ```
 
 ## 📜 指示書について
