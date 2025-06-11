@@ -14,9 +14,9 @@ PRESIDENT → BOSS → Workers の階層型指示システムを体感できま�
 
 📊 multiagent セッション (4ペイン)  
 ├── boss1: チームリーダー
-├── worker1: 実行担当者A
-├── worker2: 実行担当者B
-└── worker3: 実行担当者C
+├── worker1: バックエンド担当
+├── worker2: フロントエンド担当
+└── worker3: QA担当
 ```
 
 ## 🚀 クイックスタート
@@ -48,18 +48,8 @@ tmux attach-session -t president
 
 ### 3. Claude Code起動
 
-**手順1: President認証**
-```bash
-# まずPRESIDENTで認証を実施
-tmux send-keys -t president 'claude' C-m
-```
-認証プロンプトに従って許可を与えてください。
-
-**手順2: Multiagent一括起動**
-```bash
-# 認証完了後、multiagentセッションを一括起動
-for i in {0..3}; do tmux send-keys -t multiagent:0.$i 'claude' C-m; done
-```
+setup.shを実行すると、各ペインで自動的にClaude Codeが起動します。
+初回起動時は認証が必要になる場合があります。
 
 ### 4. デモ実行
 
@@ -73,22 +63,28 @@ PRESIDENTセッションで直接入力：
 各エージェントの役割別指示書：
 - **PRESIDENT**: `instructions/president.md`
 - **boss1**: `instructions/boss.md` 
-- **worker1,2,3**: `instructions/worker.md`
+- **worker1**: `instructions/worker1_backend.md` (バックエンド担当)
+- **worker2**: `instructions/worker2_frontend.md` (フロントエンド担当)
+- **worker3**: `instructions/worker3_qa.md` (QA担当)
 
 **Claude Code参照**: `CLAUDE.md` でシステム構造を確認
 
-**要点:**
+**作業フロー:**
 - **PRESIDENT**: 「あなたはpresidentです。指示書に従って」→ boss1に指示送信
-- **boss1**: PRESIDENT指示受信 → workers全員に指示 → 完了報告
-- **workers**: Hello World実行 → 完了ファイル作成 → 最後の人が報告
+- **boss1**: PRESIDENT指示受信 → worker1,2に並行作業指示 → 両者完了後worker3に指示
+- **worker1,2**: バックエンド/フロントエンド作業実行 → 個別に完了報告
+- **worker3**: worker1,2完了確認後、QAテスト実行 → 完了報告
 
 ## 🎬 期待される動作フロー
 
 ```
 1. PRESIDENT → boss1: "あなたはboss1です。Hello World プロジェクト開始指示"
-2. boss1 → workers: "あなたはworker[1-3]です。Hello World 作業開始"  
-3. workers → ./tmp/ファイル作成 → 最後のworker → boss1: "全員作業完了しました"
-4. boss1 → PRESIDENT: "全員完了しました"
+2. boss1 → worker1,2: バックエンド/フロントエンド作業を並行で指示
+3. worker1 → boss1: "バックエンド作業完了しました"
+4. worker2 → boss1: "フロントエンド作業完了しました"
+5. boss1 → worker3: "バックエンドとフロントエンドの実装が完了しました。QAテストを実行してください"
+6. worker3 → boss1: "QAテスト完了しました"
+7. boss1 → PRESIDENT: "全員完了しました"
 ```
 
 ## 🔧 手動操作
